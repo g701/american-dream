@@ -1,7 +1,7 @@
 ---
 title: "Mapping the American Dream"
-author: "Guillermo Gomez"
-date: 2018-05-19
+# author: "by Guillermo Gomez"
+# date: 2018-05-19
 # output: html_document
 output: 
   github_document:
@@ -571,11 +571,17 @@ merged_data %>%
 ```
 
 ## Mapping the American Dream Index
+```{r, eval = TRUE, echo = FALSE}
+merged_data %>%
+  write_csv("merged_data")
+
+
+```
 
 
 ```{r, eval = TRUE, echo = FALSE}
 # solution-begin
-chloroplether(
+p <- chloroplether(
   merged_data, 
   weighted_rank,
   title_main = "Mapping the American Dream Index" , 
@@ -586,24 +592,115 @@ chloroplether(
 # solution-end
 ```
 
-```{r, echo = FALSE}
+```{r, eval = TRUE, echo = FALSE}
 library(plotly)
-library(gapminder)
+df <- read.csv("https://raw.githubusercontent.com/plotly/datasets/master/2011_us_ag_exports.csv")
+df$hover <- with(df, paste(state, '<br>', "Beef", beef, "Dairy", dairy, "<br>",
+                           "Fruits", total.fruits, "Veggies", total.veggies,
+                           "<br>", "Wheat", wheat, "Corn", corn))
+# give state boundaries a white border
+l <- list(color = toRGB("white"), width = 2)
+# specify some map projection/options
+g <- list(
+  scope = 'usa',
+  projection = list(type = 'albers usa'),
+  showlakes = TRUE,
+  lakecolor = toRGB('white')
+)
 
-p <- ggplot(gapminder, aes(gdpPercap, lifeExp, color = continent)) +
-  geom_point(aes(size = pop, frame = year, ids = country)) +
-  scale_x_log10()
+county_df <- 
+   map_data("county") %>%
+   mutate(
+     county_name = str_c(str_to_title(`subregion`), " County"), 
+     state =  str_to_title(`region`)
+   )
 
-p <- ggplotly(p) %>% 
-  animation_opts(
-    1000, easing = "elastic", redraw = FALSE
-  ) %>% 
-  animation_button(
-    x = 1, xanchor = "right", y = 0, yanchor = "bottom"
+df <- df %>%
+  left_join(county_df, by = "state")
+  
+
+
+p <- plot_geo(df, locationmode = 'USA-counties') %>%
+  add_trace(
+    z = ~total.exports, text = ~hover, locations = ~subregion,
+    color = ~total.exports, colors = 'Purples'
   ) %>%
-  animation_slider(
-    currentvalue = list(prefix = "YEAR ", font = list(color = "red"))
+  colorbar(title = "Millions USD") %>%
+  layout(
+    title = '2011 US Agriculture Exports by State<br>(Hover for breakdown)',
+    geo = g
   )
+
+
+
+# 
+# library(plotly)
+# library(sf)
+# library(albersusa)
+# 
+# county_df <- 
+#   map_data("county") %>%
+#   mutate(
+#     county_name = str_c(str_to_title(`subregion`), " County"), 
+#     state =  str_to_title(`region`)
+#   )
+# 
+# state_df <- map_data("state")
+
+
+# 
+# # create steps for slider
+# steps <- list(
+#   list(args = list("marker.color", "red"), 
+#        label = "Red", 
+#        method = "restyle", 
+#        value = "1"
+#   ),
+#   list(args = list("marker.color", "green"), 
+#        label = "Green", 
+#        method = "restyle", 
+#        value = "2"
+#   ),
+#   list(args = list("marker.color", "blue"), 
+#        label = "Blue", 
+#        method = "restyle", 
+#        value = "3"
+#   )
+# )
+# 
+# p <- df %>%
+#   plot_ly(x = ~x, y = ~y,
+#           mode = "markers", 
+#           marker = list(size = 20,
+#                         color = 'green'), 
+#           type = "scatter") %>%
+#   layout(title = "Basic Slider",
+#          sliders = list(
+#            list(
+#              active = 1, 
+#              currentvalue = list(prefix = "Color: "), 
+#              pad = list(t = 60), 
+#              steps = steps))) 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# p <- ggplotly(p) %>% 
+#   animation_opts(
+#     1000, easing = "elastic", redraw = FALSE
+#   ) %>% 
+#   animation_button(
+#     x = 1, xanchor = "right", y = 0, yanchor = "bottom"
+#   ) %>%
+#   animation_slider(
+#     currentvalue = list(prefix = "YEAR ", font = list(color = "red"))
+#   )
 
 # Create a shareable link to your chart
 # Set up API credentials: https://plot.ly/r/getting-started
@@ -611,6 +708,18 @@ chart_link = api_create(p, filename = "gganimations", sharing = "public")
 chart_link
 
 
+
+```
+
+```{r}
+library("shiny")
+library(maps)
+library(mapproj)
+wd = "D:/GitHub"
+setwd(wd)
+source("american-dream/helpers.R")
+counties <- readRDS("american-dream/data/counties.rds")
+percent_map(counties$white, "darkgreen", "% White")
 
 ```
 
