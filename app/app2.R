@@ -13,31 +13,32 @@ counties <- readRDS("D:/GitHub/american-dream/data/counties.rds")
 
 
 # Source helper functions -----
-source("helpers.R")
+source("helpers2.R")
 
 # User interface ----
 ui <- fluidPage(
-  titlePanel("censusVis"),
+  titlePanel("Mapping the American Dream"),
   
   sidebarLayout(
     sidebarPanel(
       helpText("Create demographic maps with 
                information from the 2010 US Census."),
+      # 
+      # selectInput("var", 
+      #             label = "Choose a variable to display",
+      #             choices = c("Percent White", "Percent Black",
+      #                         "Percent Hispanic", "Percent Asian"),
+      #             selected = "Percent White"),
       
-      selectInput("var", 
-                  label = "Choose a variable to display",
-                  choices = c("Percent White", "Percent Black",
-                              "Percent Hispanic", "Percent Asian"),
-                  selected = "Percent White"),
-      
-      sliderInput("range", 
-                  label = "Range of interest:",
-                  min = 0, max = 100, value = c(0, 100))
+      sliderInput("rank", 
+                  label = "Slide to adjust rankings: ",
+                  min = 0, max = 100, value = 50
       ),
-    
-    mainPanel(plotOutput("map"))
+      
+      mainPanel(plotOutput("map"))
+    )
   )
-  )
+)
 
 # Server logic ----
 server <- function(input, output) {
@@ -60,7 +61,7 @@ server <- function(input, output) {
                      "Percent Hispanic" = "% Hispanic",
                      "Percent Asian" = "% Asian")
     
-    percent_map(data, color, legend, input$range[1], input$range[2])
+    percent_map(data, color, legend, input$rank)
   })
 }
 
