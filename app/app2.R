@@ -2,18 +2,17 @@
 library(shiny)
 library(maps)
 library(mapproj)
-# library(tidyverse)
-
-
-# setwd("D:/GitHub/american-dream")
+library(tidyverse)
 
 # Load data ----
-counties <- readRDS("D:/GitHub/american-dream/data/counties.rds")
-# countiesdf <- as.data.frame(counties)
+counties <- readRDS("counties.rds")
+# Data
+data <- read_csv("merged_data.csv") %>%
+  as.data.frame()
 
 
 # Source helper functions -----
-source("helpers2.R")
+source("helpers.R")
 
 # User interface ----
 ui <- fluidPage(
@@ -21,49 +20,77 @@ ui <- fluidPage(
   
   sidebarLayout(
     sidebarPanel(
-      helpText("Create demographic maps with 
-               information from the 2010 US Census."),
-      # 
-      # selectInput("var", 
-      #             label = "Choose a variable to display",
-      #             choices = c("Percent White", "Percent Black",
-      #                         "Percent Hispanic", "Percent Asian"),
-      #             selected = "Percent White"),
+      helpText("Adjust the weight of different factors in the American
+               Dream."),
       
-      sliderInput("rank", 
-                  label = "Slide to adjust rankings: ",
-                  min = 0, max = 100, value = 50
-      ),
+      sliderInput("k1", 
+                  label = "Intergenerational Income Mobility",
+                  min = 0, max = 100, value = 50),
       
-      mainPanel(plotOutput("map"))
-    )
+      sliderInput("k2", 
+                  label = "Job Availability by Educational Level",
+                  min = 0, max = 100, value = 25),
+      
+      sliderInput("k3", 
+                  label = "Affordability by Home Mortgage",
+                  min = 0, max = 100, value = 25),
+      
+      sliderInput("k4", 
+                  label = "Ethnic Diversity",
+                  min = 0, max = 100, value = 25)
+    ),
+    
+    mainPanel(plotOutput("map", width = "100%"))
+    
   )
 )
 
+# Weight function
+weight_calc <- function(w1, w2, w3, w4) {
+  c(w1, w2, w3, w4) / sum(w1, w2, w3, w4)
+}
+
+
 # Server logic ----
 server <- function(input, output) {
-  output$map <- renderPlot({
-    data <- switch(input$var, 
-                   "Percent White" = counties$white,
-                   "Percent Black" = counties$black,
-                   "Percent Hispanic" = counties$hispanic,
-                   "Percent Asian" = counties$asian)
+  
+  dataInput <- reactive({
     
-    color <- switch(input$var, 
-                    "Percent White" = "darkgreen",
-                    "Percent Black" = "black",
-                    "Percent Hispanic" = "darkorange",
-                    "Percent Asian" = "darkviolet")
+    weights <- weight_calc(input$k1, input$k2, input$k3, input$k4)
+    # recalc merged data
     
-    legend <- switch(input$var, 
-                     "Percent White" = "% White",
-                     "Percent Black" = "% Black",
-                     "Percent Hispanic" = "% Hispanic",
-                     "Percent Asian" = "% Asian")
     
-    percent_map(data, color, legend, input$rank)
   })
+  
+  finalInput <- reactive({
+    if (!input$adjust) return(dataInput())
+    adjust(dataInput())
+    
+})
+
+
+output$map <- renderPlot({
+  
+  
+  dataInput <- reactive({
+    
+    weights <- weight_calc(input$k1, input$k2, input$k3, input$k4)
+    
+    chloroplether(
+      finalInput, # Needs to be full data instead of just the ranking weights
+      # weights, 
+      weighted_rank,
+      title_main = "Mapping the American Dream Index" , 
+      subtitle = "A County Ranking by Income Mobility, Accessible Jobs\nAffordable Housing, and Ethnic Diversity",
+      title_legend = "Personalized American Dream Index (%)", 
+      caption = "Source: Raj Chetty Lab, ACS 5-Year Surveys"
+    )
+    
+  })
+  
+})
 }
+
 
 # Run app ----
 shinyApp(ui, server)

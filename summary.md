@@ -1,10 +1,8 @@
 Mapping the American Dream
 ================
-Guillermo Gomez
-2018-05-19
 
--   [Mapping the American Dream](#mapping-the-american-dream)
-    -   [A Data Visualization of Opportunity in America](#a-data-visualization-of-opportunity-in-america)
+-   [A Data Visualization of Opportunity in America](#a-data-visualization-of-opportunity-in-america)
+    -   [Methodology](#methodology)
     -   [Effects of Neighborhoods on Intergenerational Mobility, County-Level Estimates](#effects-of-neighborhoods-on-intergenerational-mobility-county-level-estimates)
 -   [Read mobility data set, examine the data](#read-mobility-data-set-examine-the-data)
 -   [Visualize causal estimates](#visualize-causal-estimates)
@@ -13,30 +11,36 @@ Guillermo Gomez
     -   [American Dream Index](#american-dream-index)
     -   [Mapping the American Dream Index](#mapping-the-american-dream-index)
 
-Mapping the American Dream
-==========================
+A Data Visualization of Opportunity in America
+==============================================
 
-#### A Data Visualization of Opportunity in America
+In 1931, the writer James Truslow Adams first proposed the term "the American Dream" in his book, to refer to the ideal "dream of a land in which life should be better and richer and fuller for everyone, with opportunity for each according to ability or achievement."
 
-In 1931, the writer James Truslow Adams first proposed the term "the American Dream" in his book, , to refer to the ideal
+Since then, others have attempted to define what the American Dream means, and come up with different interpretations. One famous and yet tragic version of this comes from protagonist Willy Loman in Arthur Miller's Death of a Salesman. His view that charisma and charm alone can open up opportunity and lead to prosperity both captures the imagination of the everyman reader and leads to self-destruction, as this American Dream does not hold up. I stay true to Adams' original intention and attempt to define a robust interpretation, one that we can all live by. My analysis should not be seen as a definitive guide for a low-income family looking to move to optimize for their kids' future, but rather as a conversation-started highlighting available data in a novel way. I hope primarily to add to the national conversation on opportunity and the American Dream. This project aims to map US counties which today best represent this definition of the American Dream and would be of interest to a low-income or middle-class family with children. I interpret Adams' statement to refer to four key metrics.
 
-Since then, others have attempted to define what the American Dream means and come up with different interpretations. One famous and yet tragic version of this comes from protagonist Willy Loman in Arthur Miller's . His view that charisma and charm alone can open up opportunity and lead to prosperity both captures the imagination of the everyman reader and leads to self-desctruction, as this American Dream does not hold up. I attempt to come up with a more robust interpretation, one that we can all live by.
+\*Intergenerational income mobility: Adams claims "life should be better and richer and fuller for everyone"; fuller than what, we must ask? Fuller than the past, of course. We all hope that kids have a higher standard of living than their parents. I look at data from the Equality of Opportunity Project, run by Stanford economist Raj Chetty and Harvard economist Nathaniel Hendren, on the causal income mobility for children who move to a new county. This data estimates by how much that child's adult income would increase for every year spent in a different county. Some counties are better for children to grow up in than others, as per their data. The study claims that "counties with less concentrated poverty, less income inequality, better schools, a larger share of two-parent families, and lower crime rates tend to produce better outcomes for children in poor families." Opportunity: "with opportunity for each according to ability " I define the American dream as the ability to access and live out opportunities for intra- and intergenerational advancement through hard work, even given only a high school education.
 
-This project aims to map US counties which today best represent this definition of the American Dream and would be of interest to a low-income or middle-class family with children. I interpret Adams' statement to refer to four key metrics.
+-   Affordability: "life should be better and richer ... for everyone." This implies broad accessibility beyond economic barriers. I do this analysis for the families at the 25th percentile of income, the family solidly below middle class, and look at the costs of a home mortgage as a fraction of monthly income.
+-   Community: "For everyone" implies a welcoming environment and community. I also define the American dream as the ability to live in a community where one is welcome and not culturally or linguistically isolated, so that opportunity can be practically accessed by anyone, without barriers to identity. This ideal is more difficult to translate into a metric, and may not be of similar interest to all demographics and families. I choose a proxy for ethnic diversity, the complement (one minus) the percentage of individuals who are white, non-Hispanic. I explain the reasoning for this in my methodology.
 
--   Intergenerational income mobility: Adams claims "life should be better and richer and fuller"; fuller than what, we must ask? Fuller than the past, of course.
+You may find that this definition is incomplete, or you may find that you value certain aspects of this definition of the American dream above others. This project leaves some flexibility for more personalized definitions of the American dream, by allowing for different weights on each of the four factors I consider.
 
--   "life should be better and richer ... for everyone." This implies broad accesibility beyond cultural and economic barriers. I do this analysis for the 25th percentile of income, the family solidly below middle class. I also incorporate a measure of ethnic diversity, as moving to a community where one is welcome and not culturally or linguistically isolated leads to a richer, more fulfilling community life.
+Methodology
+-----------
 
--   " with opportunity for each according to ability " I define the American dream as the ability to access and live out opportunities for intra- and intergenerational advancement through hard work even given a starting position on a lower socioeconomic "rung" and only high school education. I also define the American dream as the ability to live in a community where one is welcome and not culturally or linguistically isolated. You may find that this definition is incomplete, or you may find that you value certain aspects of this definition of the American dream above others. This project leaves some flexibility for more personalized definitions of the American dream, though these use the same data I do.
+\*Intergenerational income mobility: The effects of moving to a better county accumulate during childhood but persist into adulthood, Chetty and Hendren's findings show. Thus, moving to a county with a higher score positively impacts children's adult income earning mobility well into adulthood. This effect is bigger for low-income children, those in the 25th percentile of family income, than for richer children (75th percentile), but both benefit from moving to a better county. The negative tail end of the adult income increase estimates for the 75th percentile kids is longer than the positive tail end, implying that there is a possibility for some higher-income kids that moving will be worse than staying. I choose to look only at poorer families, the 25th percentile. I assume the factors which go into calculating these increased income effects are loosely related to the other factors I measure, and so I am not plotting the same data through multiple proxies.
 
--   " with opportunity for each according to ability "
+\*Opportunity: To account for the the importance of jobs in the American dream, I researched labor force participation rates for all adults aged 25 to 64 with a high school degree (or equivalent), or less. This is a close proxy, I argue. I calculated this participation rate and ranked all counties by it, such that counties which scored high had a large labor participation rate among residents with a high school education or less while counties which scored poorly had high unemployment rates for the same demographic, either because there are few jobs or because the jobs available require higher levels of education.
 
-. so as to guide a low-income looking to move soon toward the place where their kids' future will be brightest.
+\*Affordability: I look at housing costs as a fraction of income to rank counties by how affordable they are to buy a house in. The dataset for these metrics comes from DP04 in the 2016 ACS 5-Year Survey. I calculate the costs of a mortgaged home and not a rental because I assume the American dream includes homeownership. I calculate the percentage of these costs which fall below 29.9% of monthly income for residents, something the ACS already calculates. I choose this monthly cost percentage cutoff based on the rule of thumb that one should not spend more than 30% of income on housing. I look only at counties with more than 500 homes, as anything less would likely lack the infrastructure and amenities most people assume in their communities.
 
-I expand work from the Equality of Opportunity Project, which looks at how location and the environment in which children grow up affects intergenerational income mobility. Kids who move to better counties see a causal rise in their annual adult incomes; the effect outlasts the location, such that even after children leave the better county they'd moved to, their adult incomes are still likely to be higher. I combine this data with various key metrics on employment and jobs, affordability, and ethnic diversity, using the American Community Survey. Raj Chetty's work on intergerational income mobility is visualized in the NY Times article below, and published in the following paper. (<https://www.nytimes.com/interactive/2015/05/03/upshot/the-best-and-worst-places-to-grow-up-how-your-area-compares.html>) (<http://www.rajchetty.com/chettyfiles/movers_paper1.pdf>).
+\*Community and ethnic diversity: I choose the complement of the percentage white, non-Hispanic residents as a proxy for ethnic diversity because many counties which are affordable and may offer income mobility are strongly homogenous according to the ACS data. Conceivably, a family of a non-White background who chooses to move there might want to find other families to connect with in a religious or cultural context, as community leads to a richer, more fulfilling community life. I believe people can connect genuinely in many ways and that America is already a melting pot; as such, I recommend a low weighting of this factor.
 
-My primary motivation in undertaking this data challenge is to provide a (hypothetical) compelling and practical guide to low-income families thinking of leaving their current county for a place with greater long-term opportunity and advancement for themselves and their children. My analysis simplifies the many complex factors affecting a move and thus is a hypothetical guide more than one which can be made actionable directly.
+I expand work from the Equality of Opportunity Project, which looks at how location and the environment in which children grow up affects intergenerational income mobility. This data has been visualized in this NY Times article, and published in the following paper. Children who move to "better" counties see a causal rise in their annual adult incomes; the effect outlasts the location, such that even after children leave the better county they'd moved to, their adult incomes are still likely to be higher. I combine this data with various key metrics on employment and jobs, affordability, and ethnic diversity, using the American Community Survey.
+
+I also incorporate the following datasets from the American Community Survey, using only 5-year estimates from 2016:
+
+**Monthly housing costs, "ACS\_16\_5YR\_DP04" **Ethnic makeup by county, "ACS\_16\_5YR\_B03002" \*\*Employment by educational level, "ACS\_16\_5YR\_S2301"
 
 Effects of Neighborhoods on Intergenerational Mobility, County-Level Estimates
 ------------------------------------------------------------------------------
@@ -220,12 +224,8 @@ I now combine all four data sets into what I call the "American Dream Index." I 
 Mapping the American Dream Index
 --------------------------------
 
-<img src="summary_files/figure-markdown_github/unnamed-chunk-11-1.png" width="100%" />
+<img src="summary_files/figure-markdown_github/unnamed-chunk-13-1.png" width="100%" />
 
-    ## Warning: Ignoring unknown aesthetics: frame, ids
-
-<iframe src="https://plot.ly/~guillermogomez701/2.embed" width="800" height="600" id="igraph" scrolling="no" seamless="seamless" frameBorder="0">
-</iframe>
     ## Warning: Column `county` has different attributes on LHS and RHS of join
 
     ## # A tibble: 10 x 3

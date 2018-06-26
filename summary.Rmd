@@ -96,37 +96,48 @@ counties_rds <- "D:/R/cb_2015_us_county_20m_sf.rds"
 ```
 
 
-# Mapping the American Dream 
-#### A Data Visualization of Opportunity in America
+# A Data Visualization of Opportunity in America
+In 1931, the writer James Truslow Adams first proposed the term "the American Dream" in his book, to refer to the ideal "dream of a land in which life should be better and richer and fuller for everyone, with opportunity for each according to ability or achievement."
 
-In 1931, the writer James Truslow Adams first proposed the term "the American Dream" in his book, \textit{The American Epic}, to refer to the ideal 
+Since then, others have attempted to define what the American Dream means, and come up with different interpretations. One famous and yet tragic version of this comes from protagonist Willy Loman in Arthur Miller's Death of a Salesman. His view that charisma and charm alone can open up opportunity and lead to prosperity both captures the imagination of the everyman reader and leads to self-destruction, as this American Dream does not hold up. I stay true to Adams' original intention and attempt to define a robust interpretation, one that we can all live by.
+My analysis should not be seen as a definitive guide for a low-income family looking to move to optimize for their kids' future, but rather as a conversation-started highlighting available data in a novel way. I hope primarily to add to the national conversation on opportunity and the American Dream. 
+This project aims to map US counties which today best represent this definition of the American Dream and would be of interest to a low-income or middle-class family with children. I interpret Adams' statement to refer to four key metrics.
 
-\textit{"dream of a land in which life should be better and richer and fuller for everyone, with opportunity for each according to ability or achievement."} 
+*Intergenerational income mobility: Adams claims "life should be better and richer and fuller for everyone"; fuller than what, we must ask? Fuller than the past, of course. We all hope that kids have a higher standard of living than their parents. I look at data from the Equality of Opportunity Project, run by Stanford economist Raj Chetty and Harvard economist Nathaniel Hendren, on the causal income mobility for children who move to a new county. This data estimates by how much that child's adult income would increase for every year spent in a different county. Some counties are better for children to grow up in than others, as per their data. The study claims that "counties with less concentrated poverty, less income inequality, better schools, a larger share of two-parent families, and lower crime rates tend to produce better outcomes for children in poor families." 
+Opportunity: "with opportunity for each according to ability " I define the American dream as the ability to access and live out opportunities for intra- and intergenerational advancement through hard work, even given only a high school education. 
 
-Since then, others have attempted to define what the American Dream means and come up with different interpretations. One famous and yet tragic version of this comes from protagonist Willy Loman in Arthur Miller's \textit{Death of a Salesman}. His view that charisma and charm alone can open up opportunity and lead to prosperity both captures the imagination of the everyman reader and leads to self-desctruction, as this American Dream does not hold up. I attempt to come up with a more robust interpretation, one that we can all live by. 
+* Affordability: "life should be better and richer ... for everyone." This implies broad accessibility beyond economic barriers. I do this analysis for the families at the 25th percentile of income, the family solidly below middle class, and look at the costs of a home mortgage as a fraction of monthly income. 
+* Community:  "For everyone" implies a welcoming environment and community. I also define the American dream as the ability to live in a community where one is welcome and not culturally or linguistically isolated, so that opportunity can be practically accessed by anyone, without barriers to identity. This ideal is more difficult to translate into a metric, and may not be of similar interest to all demographics and families. I choose a proxy for ethnic diversity, the complement (one minus) the percentage of individuals who are white, non-Hispanic. I explain the reasoning for this in my methodology. 
 
-This project aims to map US counties which today best represent this definition of the American Dream and would be of interest to a low-income or middle-class family with children. I interpret Adams' statement to refer to four key metrics. 
+You may find that this definition is incomplete, or you may find that you value certain aspects of this definition of the American dream above others. This project leaves some flexibility for more personalized definitions of the American dream, by allowing for different weights on each of the four factors I consider. 
 
-* Intergenerational income mobility: Adams claims "life should be better and richer and fuller"; fuller than what, we must ask? Fuller than the past, of course.
+## Methodology
 
-* "life should be better and richer ... for everyone." This implies broad accesibility beyond cultural and economic barriers. I do this analysis for the 25th percentile of income, the family solidly below middle class. I also incorporate a measure of ethnic diversity, as moving to a community where one is welcome and not culturally or linguistically isolated leads to a richer, more fulfilling community life. 
+*Intergenerational income mobility: The effects of moving to a better county accumulate during childhood but persist into adulthood, Chetty and Hendren's findings show. Thus, moving to a county with a higher score positively impacts children's adult income earning mobility well into adulthood. This effect is bigger for low-income children, those in the 25th percentile of family income, than for richer children (75th percentile), but both benefit from moving to a better county. The negative tail end of the adult income increase estimates for the 75th percentile kids is longer than the positive tail end, implying that there is a possibility for some higher-income kids that moving will be worse than staying. I choose to look only at poorer families, the 25th percentile. I assume the factors which go into calculating these increased income effects are loosely related to the other factors I measure, and so I am not plotting the same data through multiple proxies. 
 
-* " with opportunity for each according to ability "
-I define the American dream as the ability to access and live out opportunities for intra- and intergenerational advancement through hard work even given a starting position on a lower socioeconomic "rung" and only high school education. I also define the American dream as the ability to live in a community where one is welcome and not culturally or linguistically isolated. You may find that this definition is incomplete, or you may find that you value certain aspects of this definition of the American dream above others. This project leaves some flexibility for more personalized definitions of the American dream, though these use the same data I do. 
+*Opportunity: To account for the the importance of jobs in the American dream, I researched labor force participation rates for all adults aged 25 to 64 with a high school degree (or equivalent), or less. This is a close proxy, I argue. I calculated this participation rate and ranked all counties by it, such that counties which scored high had a large labor participation rate among residents with a high school education or less while counties which scored poorly had high unemployment rates for the same demographic, either because there are few jobs or because the jobs available require higher levels of education.
+
+*Affordability: I look at housing costs as a fraction of income to rank counties by how affordable they are to buy a house in. The dataset for these metrics comes from DP04 in the 2016 ACS 5-Year Survey. I calculate the costs of a mortgaged home and not a rental because I assume the American dream includes homeownership. I calculate the percentage of these costs which fall below 29.9% of monthly income for residents, something the ACS already calculates. I choose this monthly cost percentage cutoff based on the rule of thumb that one should not spend more than 30% of income on housing. I look only at counties with more than 500 homes, as anything less would likely lack the infrastructure and amenities most people assume in their communities.  
+
+*Community and ethnic diversity: I choose the complement of the percentage white, non-Hispanic residents as a proxy for ethnic diversity because many counties which are affordable and may offer income mobility are strongly homogenous according to the ACS data. Conceivably, a family of a non-White background who chooses to move there might want to find other families to connect with in a religious or cultural context, as community leads to a richer, more fulfilling community life. I believe people can connect genuinely in many ways and that America is already a melting pot; as such, I recommend a low weighting of this factor.  
 
 
-* " with opportunity for each according to ability "
 
-. so as to guide a low-income looking to move soon toward the place where their kids' future will be brightest. 
 
-I expand work from the Equality of Opportunity Project, which looks at how location and the environment in which children grow up affects intergenerational income mobility. Kids who move to better counties see a causal rise in their annual adult incomes; the effect outlasts the location, such that even after children leave the better county they'd moved to, their adult incomes are still likely to be higher. I combine this data with various key metrics on employment and jobs, affordability, and ethnic diversity, using the American Community Survey. 
-Raj Chetty's work on intergerational income mobility is visualized in the NY Times article below, and published in the following paper. 
-(https://www.nytimes.com/interactive/2015/05/03/upshot/the-best-and-worst-places-to-grow-up-how-your-area-compares.html)
-(http://www.rajchetty.com/chettyfiles/movers_paper1.pdf). 
 
-My primary motivation in undertaking this data challenge is to provide a (hypothetical) compelling 
-and practical guide to low-income families thinking of leaving their current county 
-for a place with greater long-term opportunity and advancement for themselves and their children. My analysis simplifies the many complex factors affecting a move and thus is a hypothetical guide more than one which can be made actionable directly.
+I expand work from the Equality of Opportunity Project, which looks at how location and the environment in which children grow up affects intergenerational income mobility. This data has been visualized in this NY Times article, and published in the following paper. Children who move to "better" counties see a causal rise in their annual adult incomes; the effect outlasts the location, such that even after children leave the better county they'd moved to, their adult incomes are still likely to be higher. I combine this data with various key metrics on employment and jobs, affordability, and ethnic diversity, using the American Community Survey. 
+
+I also incorporate the following datasets from the American Community Survey, using only 5-year estimates from 2016:
+
+**Monthly housing costs, "ACS_16_5YR_DP04"
+**Ethnic makeup by county, "ACS_16_5YR_B03002"
+**Employment by educational level, "ACS_16_5YR_S2301"
+
+
+
+
+
+
 
 
 ## Effects of Neighborhoods on Intergenerational Mobility, County-Level Estimates
@@ -149,30 +160,30 @@ mobility <-
     county_stateabbrv = str_c(county_name, stateabbrv, sep = " County, ")
   ) 
 
-mobility %>%
-  ggplot(aes(pct_kids_p25)) +
-  geom_histogram(bins = 20, fill = "green") +
-  theme_minimal() +
-  labs(
-    title = "Distribution of Adult Income Mobility by County, Causal Estimates", 
-    subtitle = "For Families at the 25% Percentile of Income and with Kids",
-    x = "Causal Income Mobility Estimate (% Increase)", 
-    y = "Frequency",
-    caption = "Source: Raj Chetty"
-  )
-
-mobility %>%
-  ggplot(aes(pct_kids_p75)) +
-  geom_histogram(bins = 20, fill = "blue") +
-  theme_minimal() +
-  labs(
-    title = "Distribution of Adult Income Mobility by County, Causal Estimates", 
-    subtitle = "For Families at the 75% Percentile of Income and with Kids",
-    x = "Causal Income Mobility Estimate (% Increase)", 
-    y = "Frequency",
-    caption = "Source: Raj Chetty"
-  )
-# solution-end
+# mobility %>%
+#   ggplot(aes(pct_kids_p25)) +
+#   geom_histogram(bins = 20, fill = "green") +
+#   theme_minimal() +
+#   labs(
+#     title = "Distribution of Adult Income Mobility by County, Causal Estimates", 
+#     subtitle = "For Families at the 25% Percentile of Income and with Kids",
+#     x = "Causal Income Mobility Estimate (% Increase)", 
+#     y = "Frequency",
+#     caption = "Source: Raj Chetty"
+#   )
+# 
+# mobility %>%
+#   ggplot(aes(pct_kids_p75)) +
+#   geom_histogram(bins = 20, fill = "blue") +
+#   theme_minimal() +
+#   labs(
+#     title = "Distribution of Adult Income Mobility by County, Causal Estimates", 
+#     subtitle = "For Families at the 75% Percentile of Income and with Kids",
+#     x = "Causal Income Mobility Estimate (% Increase)", 
+#     y = "Frequency",
+#     caption = "Source: Raj Chetty"
+#   )
+# # solution-end
 ```
 
 
@@ -508,7 +519,7 @@ chloroplether(
 Some parts of the country are very white. Some of these counties are counties that have ranked highly in previous analyses. It's possible these counties will not be good fits for families who might be more comfortable with some diversity.   
 
 
-## American Dream Index
+# American Dream Index
 
 I now combine all four data sets into what I call the "American Dream Index." I normalize the percentage estimates from Raj Chetty's income mobility data to be from 0 to 100% instead of -2 to +2% annual income gain based on the minimum and maximum values of this range. The 100% represents the most adult income-boosting county, and 0% represents the worst (with the greatest annual adult income decline). This will let me compare all the data I've looked at as percentages. The American dream is a flexible concept and there is no one definition. Given the data I've used and the assumptions I've made, there is much room for interpretation. I choose to weight the factors I've analyzed as follows:
 
@@ -573,7 +584,7 @@ merged_data %>%
 ## Mapping the American Dream Index
 ```{r, eval = TRUE, echo = FALSE}
 merged_data %>%
-  write_csv("merged_data")
+  write_csv("merged_data.csv")
 
 
 ```
@@ -592,136 +603,9 @@ p <- chloroplether(
 # solution-end
 ```
 
-```{r, eval = TRUE, echo = FALSE}
-library(plotly)
-df <- read.csv("https://raw.githubusercontent.com/plotly/datasets/master/2011_us_ag_exports.csv")
-df$hover <- with(df, paste(state, '<br>', "Beef", beef, "Dairy", dairy, "<br>",
-                           "Fruits", total.fruits, "Veggies", total.veggies,
-                           "<br>", "Wheat", wheat, "Corn", corn))
-# give state boundaries a white border
-l <- list(color = toRGB("white"), width = 2)
-# specify some map projection/options
-g <- list(
-  scope = 'usa',
-  projection = list(type = 'albers usa'),
-  showlakes = TRUE,
-  lakecolor = toRGB('white')
-)
-
-county_df <- 
-   map_data("county") %>%
-   mutate(
-     county_name = str_c(str_to_title(`subregion`), " County"), 
-     state =  str_to_title(`region`)
-   )
-
-df <- df %>%
-  left_join(county_df, by = "state")
-  
-
-
-p <- plot_geo(df, locationmode = 'USA-counties') %>%
-  add_trace(
-    z = ~total.exports, text = ~hover, locations = ~subregion,
-    color = ~total.exports, colors = 'Purples'
-  ) %>%
-  colorbar(title = "Millions USD") %>%
-  layout(
-    title = '2011 US Agriculture Exports by State<br>(Hover for breakdown)',
-    geo = g
-  )
 
 
 
-# 
-# library(plotly)
-# library(sf)
-# library(albersusa)
-# 
-# county_df <- 
-#   map_data("county") %>%
-#   mutate(
-#     county_name = str_c(str_to_title(`subregion`), " County"), 
-#     state =  str_to_title(`region`)
-#   )
-# 
-# state_df <- map_data("state")
-
-
-# 
-# # create steps for slider
-# steps <- list(
-#   list(args = list("marker.color", "red"), 
-#        label = "Red", 
-#        method = "restyle", 
-#        value = "1"
-#   ),
-#   list(args = list("marker.color", "green"), 
-#        label = "Green", 
-#        method = "restyle", 
-#        value = "2"
-#   ),
-#   list(args = list("marker.color", "blue"), 
-#        label = "Blue", 
-#        method = "restyle", 
-#        value = "3"
-#   )
-# )
-# 
-# p <- df %>%
-#   plot_ly(x = ~x, y = ~y,
-#           mode = "markers", 
-#           marker = list(size = 20,
-#                         color = 'green'), 
-#           type = "scatter") %>%
-#   layout(title = "Basic Slider",
-#          sliders = list(
-#            list(
-#              active = 1, 
-#              currentvalue = list(prefix = "Color: "), 
-#              pad = list(t = 60), 
-#              steps = steps))) 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# p <- ggplotly(p) %>% 
-#   animation_opts(
-#     1000, easing = "elastic", redraw = FALSE
-#   ) %>% 
-#   animation_button(
-#     x = 1, xanchor = "right", y = 0, yanchor = "bottom"
-#   ) %>%
-#   animation_slider(
-#     currentvalue = list(prefix = "YEAR ", font = list(color = "red"))
-#   )
-
-# Create a shareable link to your chart
-# Set up API credentials: https://plot.ly/r/getting-started
-chart_link = api_create(p, filename = "gganimations", sharing = "public")
-chart_link
-
-
-
-```
-
-```{r}
-library("shiny")
-library(maps)
-library(mapproj)
-wd = "D:/GitHub"
-setwd(wd)
-source("american-dream/helpers.R")
-counties <- readRDS("american-dream/data/counties.rds")
-percent_map(counties$white, "darkgreen", "% White")
-
-```
 
 ```{r, eval = TRUE, echo = FALSE, message = FALSE, warnings = FALSE}
 merged_data %>%
@@ -733,8 +617,23 @@ merged_data %>%
   top_n(-10, wt = weighted_rank) %>%
   left_join(population %>% select(-county_state), by = "county") %>%
   select(county_state, weighted_rank, pop_2016) 
+
+merged_data %>%
+  write_csv("merged_data.csv")
 ```
 
 
 The American dream is strongest in a handful of counties. There is a strong pattern here which agrees with anecdotal evidence I've heard about where families are moving to. We could expand this analysis by looking at where people are actually moving from and to. 
 Smaller counties are better for the American dream overall. The highest-scoring counties are the smallest. 
+
+```{r}
+library(datamaps)
+options(stringsAsFactors = F)
+ichoropleth(Crime ~ State,
+            data = violent_crime,
+            pal = `PuRd`, 
+            animate = "Year"
+            )
+
+
+```

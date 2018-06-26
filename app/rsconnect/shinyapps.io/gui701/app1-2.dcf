@@ -1,0 +1,13 @@
+name: app1-2
+title: app1-2
+username:
+account: gui701
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 354839
+bundleId: 1444168
+url: https://gui701.shinyapps.io/app1-2/
+when: 1529709026.13969
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: app2.R|helpers_original.R
