@@ -71,11 +71,11 @@ states <-
 
 
 # Mobility data
-mobility_dta <- 
-  read_dta("online_table2.dta") 
+mobility_data <-
+  read_csv("mobility_data.csv")
 
 mobility <-
-  mobility_dta %>%
+  mobility_data %>%
   mutate(
     pct_kids_p25 = pct_causal_p25_kr26,
     pct_kids_p75 = pct_causal_p75_kr26, 

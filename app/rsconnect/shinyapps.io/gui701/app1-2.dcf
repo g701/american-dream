@@ -5,9 +5,9 @@ account: gui701
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 354839
-bundleId: 1444168
+bundleId: 1451345
 url: https://gui701.shinyapps.io/app1-2/
-when: 1529709026.13969
+when: 1530072290.36773
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: app2.R|helpers_original.R

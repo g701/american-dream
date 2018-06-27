@@ -56,7 +56,7 @@ server <- function(input, output) {
       weights, 
       weighted_rank,
       title_main = "Mapping the American Dream Index" , 
-      subtitle = "A County Ranking by Income Mobility, Accessible Jobs\nAffordable Housing, and Ethnic Diversity",
+      subtitle = "A County Ranking by Income Mobility, Accessible Jobs,\nAffordable Housing, and Ethnic Diversity",
       title_legend = "Personalized American Dream Index (%)", 
       caption = "Source: Raj Chetty Lab, ACS 5-Year Surveys"
     )
