@@ -88,7 +88,7 @@ ethnicity_file <-
 population_file <- "D:/c01 Data/PEP_2016_PEPANNRES/PEP_2016_PEPANNRES.csv"
 
 diversity_file <-
-  "D:/c01 Data/us_map_ethnicities.csv"
+  "D:/c01 Data/ethnic_entropy_counties.csv"
 
 
 
@@ -487,86 +487,21 @@ Below I plot the percentage of a county's population that is white, non-Hispanic
 # solution-begin
 
 # Diversity Entropy
-entropy_index <- function(...) {
-  d <- cbind(...) %>%
-    as.numeric()
-  
-  percentage_vector <- d[d != 0]
-  
-  R = length(percentage_vector)
-  
-  e <- numeric(R) # Create vector of zeros
-  
-  for (i in 1:R) {
-    e[i] = percentage_vector[i] * log(1.0 / percentage_vector[i])
-  }
-  
-  E = prod(e)
-  
-  return(E)
-}
-
-
-
-# Ethnicity
-# diversity_data <-
-#   read_csv(
-#     ethnicity_file,
-#     na = c("(X)", "-", "**", "N")
-#   )
-
 diversity_data <-
   read_csv(diversity_file) %>%
-  arrange(FIPS)
-
-diversity_v <- numeric(nrow(diversity_data))
-
-for (i in 1:nrow(diversity_data)) {
-    d <- 
-  diversity_data %>%
-    slice(i) %>%
-    select(4:9) %>%
-    as.numeric()/100 
-  
-  percentage_vector <- d[d != 0]
-  
-  R = length(percentage_vector)
-  
-  e <- numeric(R) # Create vector of zeros
-  
-  for (i in 1:R) {
-    e[i] = percentage_vector[i] * log(1.0 / percentage_vector[i])
-  }
-  
-  diversity_v[i] <- prod(e)
-}
-
-
-max_d <- max(diversity_v)
-
-
-diversity_data <-
-  diversity_data %>%
-  mutate(diversity = diversity_v / max_d * 100 %>% round(1)) 
-
-
-# 
-# diversity_data <-
-#   diversity_data %>%
-#   mutate(diversity = entropy_index(diversity_data[4:9]))
-
+  slice(-1)
 
 diversity_county <-
   diversity_data %>%
-  filter(!str_detect(County, "Alaska"),  !str_detect(County, "Hawaii")) %>%
+  filter(!(`State Abbreviation` %in% c("AK", "HI"))) %>%
+  select(`State Abbreviation`, `County FIPS`, `Entropy Score, 2010`) %>%
   mutate(
-    county = as.numeric(GEO.id2), 
-    county_state = `GEO.display-label`,
-    pct_white = HD01_VD03 / HD01_VD01 * 100, 
-    diversity = 100 - pct_white
+    county = `County FIPS` %>%  as.numeric(), 
+    state = `State Abbreviation`, 
+    diversity = `Entropy Score, 2010` %>% as.numeric()
   ) %>%
   left_join(counties, by = "county") %>%
-  select(county, county_state, pct_white, diversity, geometry) 
+  select(county, state, diversity, geometry) 
 # solution-end
 ```
 
@@ -576,11 +511,11 @@ diversity_county <-
 # solution-begin
 chloroplether(
   diversity_county, 
-  pct_white,
-  title_main = "Percentage White non-Hispanic Demographic by County" , 
+  diversity,
+  title_main = "Ethnic Entropy Score: Number and Relative Size of Groups" , 
   subtitle = "",
-  title_legend = "Percentage of County Population", 
-  caption = "Source: ACS"
+  title_legend = "Ethnic Diversity Entropy Score", 
+  caption = "Source: US2010 Project"
 )
 # solution-end
 ```
@@ -605,7 +540,7 @@ merged_data <-
   select(-county_stateabbrv) %>%
   left_join(jobs_county %>% select(-geometry), by = c("county")) %>%
   left_join(housing_county %>% select(-geometry), by = c("county", "county_state")) %>%
-  left_join(diversity_county %>% select(-c(geometry, county_state, pct_white)), by = "county") %>%
+  left_join(diversity_county %>% select(-c(geometry, state)), by = "county") %>%
   filter(!is.na(`pct_below_29.9`), !is.na(diversity)) %>%
   mutate(
     gross_rank = row_number(),
@@ -629,6 +564,7 @@ weights <- weight_calc(0.45, 0.25, 0.25, 0.05)
 
 ```{r, eval = TRUE, echo = FALSE}
 # solution-begin
+# Ignoring Ethnic Diversity
 weights <- weight_calc(1, 1, 1, 0)
 
 merged_data <-
@@ -643,10 +579,11 @@ merged_data <-
   arrange(desc(weighted_rank))
 
 merged_data %>% 
-  top_n(5, wt = weighted_rank)
+  top_n(10, wt = weighted_rank)
 
 merged_data %>% 
-  top_n(-5, wt = weighted_rank)
+  top_n(-10, wt = weighted_rank) %>%
+  arrange(weighted_rank)
 # solution-end
 ```
 
@@ -676,12 +613,51 @@ merged_data %>%
 merged_data %>%
   top_n(-10, wt = weighted_rank) %>%
   left_join(population %>% select(-county_state), by = "county") %>%
-  select(county_state, weighted_rank, pop_2016) 
-
-merged_data %>%
-  write_csv("merged_data.csv")
+  select(county_state, weighted_rank, pop_2016) %>%
+  arrange(weighted_rank)
 ```
 
+
+
+
+```{r, eval = TRUE, echo = FALSE}
+# solution-begin
+# Weighing Ethnic Diversity
+weights <- weight_calc(1, 1, 1, 1)
+
+merged_data <-
+  merged_data %>%
+  rowwise() %>%
+  mutate(
+    weighted_rank = pct_kids_p25 * weights[1] + 
+      employrate * weights[2] +
+      `pct_below_29.9` * weights[3] +
+      diversity * weights[4]
+  ) %>%
+  arrange(desc(weighted_rank))
+
+merged_data %>% 
+  top_n(10, wt = weighted_rank)
+
+merged_data %>% 
+  top_n(-10, wt = weighted_rank) %>%
+  arrange(desc(weighted_rank))
+# solution-end
+```
+
+```{r, eval = TRUE, echo = FALSE}
+
+p <- chloroplether(
+  merged_data, 
+  weighted_rank,
+  title_main = "Mapping the American Dream Index" , 
+  subtitle = "A County Ranking by Income Mobility, Accessible Jobs\nAffordable Housing, and Ethnic Diversity",
+  title_legend = "Personalized American Dream Index (%)", 
+  caption = "Source: Raj Chetty Lab, ACS 5-Year Surveys"
+)
+p
+
+```
 
 The American dream is strongest in a handful of counties. There is a strong pattern here which agrees with anecdotal evidence I've heard about where families are moving to. We could expand this analysis by looking at where people are actually moving from and to. 
 Smaller counties are better for the American dream overall. The highest-scoring counties are the smallest. 
